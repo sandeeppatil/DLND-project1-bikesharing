@@ -7,7 +7,7 @@ class NeuralNetwork(object):
         self.input_nodes = input_nodes
         self.hidden_nodes = hidden_nodes
         self.output_nodes = output_nodes
-
+        
         # Initialize weights
         self.weights_input_to_hidden = np.random.normal(0.0, self.input_nodes**-0.5, 
                                        (self.input_nodes, self.hidden_nodes))
