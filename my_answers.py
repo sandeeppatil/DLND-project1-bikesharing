@@ -71,6 +71,13 @@ class NeuralNetwork(object):
         final_inputs = np.dot(hidden_outputs, self.weights_hidden_to_output) # signals into final output layer
         final_outputs = final_inputs
         
+        print("\nDEBUG::In forward pass")
+        print("DEBUG::Feature shape: ", X.shape)
+        print("DEBUG::hidden_inputs shape: ", hidden_inputs.shape)
+        print("DEBUG::hidden_outputs shape: ", hidden_outputs.shape)
+        print("DEBUG::final_inputs shape: ", final_inputs.shape)
+        print("DEBUG::final_outputs shape: ", final_outputs.shape)
+        
         return final_outputs, hidden_outputs
 
     def backpropagation(self, final_outputs, hidden_outputs, X, y, delta_weights_i_h, delta_weights_h_o):
@@ -91,7 +98,7 @@ class NeuralNetwork(object):
         error = y - final_outputs # Output layer error is the difference between desired target and actual output.
 
         # TODO: Calculate the hidden layer's contribution to the error
-        hidden_error = np.dot(error, self.weights_hidden_to_output)
+        hidden_error = np.dot(error, self.weights_hidden_to_output.T).T
         
         # TODO: Backpropagated error terms - Replace these values with your calculations.
         output_error_term = error * final_outputs * (1 - final_outputs)
@@ -102,7 +109,7 @@ class NeuralNetwork(object):
         # Weight step (input to hidden)
         delta_weights_i_h += hidden_error_term * X[:, None]
         # Weight step (hidden to output)
-        delta_weights_h_o += output_error_term * hidden_outputs
+        delta_weights_h_o += output_error_term * hidden_outputs[:, None]
         return delta_weights_i_h, delta_weights_h_o
 
     def update_weights(self, delta_weights_i_h, delta_weights_h_o, n_records):
