@@ -55,7 +55,7 @@ class NeuralNetwork(object):
 
     def forward_pass_train(self, X):
         ''' Implement forward pass here 
-         
+        
             Arguments
             ---------
             X: features batch
@@ -71,12 +71,12 @@ class NeuralNetwork(object):
         final_inputs = np.dot(hidden_outputs, self.weights_hidden_to_output) # signals into final output layer
         final_outputs = final_inputs
         
-        print("\nDEBUG::In forward pass")
-        print("DEBUG::Feature shape: ", X.shape)
-        print("DEBUG::hidden_inputs shape: ", hidden_inputs.shape)
-        print("DEBUG::hidden_outputs shape: ", hidden_outputs.shape)
-        print("DEBUG::final_inputs shape: ", final_inputs.shape)
-        print("DEBUG::final_outputs shape: ", final_outputs.shape)
+        # print("\nDEBUG::In forward pass")
+        # print("DEBUG::Feature shape: ", X.shape)
+        # print("DEBUG::hidden_inputs shape: ", hidden_inputs.shape)
+        # print("DEBUG::hidden_outputs shape: ", hidden_outputs.shape)
+        # print("DEBUG::final_inputs shape: ", final_inputs.shape)
+        # print("DEBUG::final_outputs shape: ", final_outputs.shape)
         
         return final_outputs, hidden_outputs
 
@@ -98,14 +98,16 @@ class NeuralNetwork(object):
         error = y - final_outputs # Output layer error is the difference between desired target and actual output.
 
         # TODO: Calculate the hidden layer's contribution to the error
-        hidden_error = np.dot(error, self.weights_hidden_to_output.T).T
+        hidden_error = np.dot(error, self.weights_hidden_to_output.T)
         
         # TODO: Backpropagated error terms - Replace these values with your calculations.
-        output_error_term = error * final_outputs * (1 - final_outputs)
-        
+        #output_error_term = error * final_outputs * (1 - final_outputs)
+        ##Refer: https://knowledge.udacity.com/questions/426808
+        output_error_term = error
+
         hidden_error_term = hidden_error * hidden_outputs * (1 - hidden_outputs)
         
-        print("LOG::", hidden_error, hidden_error_term)
+        # print("LOG::", hidden_error, hidden_error_term)
         # Weight step (input to hidden)
         delta_weights_i_h += hidden_error_term * X[:, None]
         # Weight step (hidden to output)
@@ -139,8 +141,9 @@ class NeuralNetwork(object):
         hidden_outputs = self.activation_function(hidden_inputs) # signals from hidden layer
         
         # TODO: Output layer - Replace these values with the appropriate calculations.
+        ##Refer: https://knowledge.udacity.com/questions/426808
         final_inputs = np.dot(hidden_outputs, self.weights_hidden_to_output) # signals into final output layer
-        final_outputs = self.activation_function(final_inputs) # signals from final output layer 
+        final_outputs = final_inputs # signals from final output layer 
         
         return final_outputs
 
@@ -148,7 +151,13 @@ class NeuralNetwork(object):
 #########################################################
 # Set your hyperparameters here
 ##########################################################
-iterations = 100
-learning_rate = 0.1
-hidden_nodes = 2
+
+#The number of epochs should be between 50 and 15000
+#The number of hidden nodes should be 5 and 100
+#There should be exactly one output node
+#The learning_rate should be between 0.05 and 5
+
+iterations = 10000
+learning_rate = 0.6
+hidden_nodes = 15
 output_nodes = 1
